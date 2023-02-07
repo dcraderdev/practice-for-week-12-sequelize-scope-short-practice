@@ -35,13 +35,30 @@ module.exports = (sequelize, DataTypes) => {
             type
           }  
         }   
+      },
+      isKeyboard:{
+        where:{
+          type: 'keyboard'
+        }  
+      },
+
+      isString:{
+        where:{
+          type: 'string'
+        }  
+      },
+
+      isPercussion:{
+        where:{
+          type: 'percussion'
+        }  
+      },
+      isWoodwind:{
+        where:{
+          type: 'woodwind'
+        }  
       }
     }
-      // isKeyboard:{
-      //   where:{
-      //     type: 'keyboard'
-      //   }  
-      // }
   
   });
   return Instrument;

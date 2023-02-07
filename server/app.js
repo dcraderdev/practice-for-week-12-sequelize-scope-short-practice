@@ -32,23 +32,28 @@ app.get('/instruments', async (req, res, next) => {
 // STEP 2: Implement named scopes to their respective routes
 app.get('/instruments/keyboard', async (req, res, next) => {
 
+    let word = req.route.path.split('/').pop()
+    console.log(word);
 
-    console.log('here',req.route.path.split('/').pop());
-let word = req.route.path.split('/').pop()
-console.log(word);
-
-    const keyboards = await Instrument.scope({method:['hasType', req.route.path.split('/').pop()]}).findAll()
+    // const keyboards = await Instrument.scope({method:['hasType', req.route.path.split('/').pop()]}).findAll()
+    const keyboards = await Instrument.scope('isKeyboard')
+    
     res.json(keyboards);
 });
 
 
 app.get('/instruments/string', async (req, res, next) => {
-    const strings = await Instrument.scope({method:['hasType', "string"]}).findAll()
+    // const strings = await Instrument.scope({method:['hasType', "string"]}).findAll()
+    const strings = await Instrument.scope('isString')
+
+
     res.json(strings);
 });
 
 app.get('/instruments/woodwind', async (req, res, next) => {
-    const woodWinds = await Instrument.scope({method:['hasType', "woodwind"]}).findAll()
+    // const woodWinds = await Instrument.scope({method:['hasType', "woodwind"]}).findAll()
+    const woodWinds = await Instrument.scope('isWoodwind')
+
     res.json(woodWinds);
 });
 
@@ -61,8 +66,9 @@ app.get('/stores/:storeId/instruments', async (req, res, next) => {
 });
 
 app.get('/stores/:storeId/instruments/:type', async (req, res, next) => {
-    const filteredInstruments = await Instrument.findAll()
-    // Your code here
+    // const filteredInstruments = await Instrument.findAll()
+    let type = req.params.type;
+    const filteredInstruments = await Instrument.scope({method:['hasType', type]}).findAll()
     res.json(filteredInstruments);
 });
 
