@@ -1,4 +1,5 @@
 'use strict';
+const { Op } = require('sequelize');
 const {
   Model
 } = require('sequelize');
@@ -20,6 +21,31 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Store',
+
+    defaultScope:{
+      attributes:{
+       exclude: [`createdAt`, `updatedAt`]
+       }
+     },
+
+    scopes:{
+      isKeyboard(storeId){
+        const {Instrument} = require('../models');
+        return {
+          where:{
+            storeId,
+            type: 'keyboard'
+            }
+     
+        ,
+        include: {model:Instrument}
+        }
+      }
+
+    }
+
+
+
   });
   return Store;
 };

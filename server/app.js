@@ -14,6 +14,13 @@ const { Store, Instrument } = require('./db/models');
 // Express using json - DO NOT MODIFY
 app.use(express.json());
 
+
+//test route
+app.get('/', async (req, res, next) => {
+    res.json({hey:'hello'});
+});
+
+
 // STEP 1: Apply a default scope onto the searches
 // List of all the instruments in the database - DO NOT MODIFY
 app.get('/instruments', async (req, res, next) => {
@@ -24,18 +31,24 @@ app.get('/instruments', async (req, res, next) => {
 
 // STEP 2: Implement named scopes to their respective routes
 app.get('/instruments/keyboard', async (req, res, next) => {
-    const keyboards = await Instrument.findAll()
+
+
+    console.log('here',req.route.path.split('/').pop());
+let word = req.route.path.split('/').pop()
+console.log(word);
+
+    const keyboards = await Instrument.scope({method:['hasType', req.route.path.split('/').pop()]}).findAll()
     res.json(keyboards);
 });
 
 
 app.get('/instruments/string', async (req, res, next) => {
-    const strings = await Instrument.findAll()
+    const strings = await Instrument.scope({method:['hasType', "string"]}).findAll()
     res.json(strings);
 });
 
 app.get('/instruments/woodwind', async (req, res, next) => {
-    const woodWinds = await Instrument.findAll()
+    const woodWinds = await Instrument.scope({method:['hasType', "woodwind"]}).findAll()
     res.json(woodWinds);
 });
 
@@ -68,5 +81,5 @@ app.get('/', (req, res) => {
 });
 
 // Set port and listen for incoming requests - DO NOT MODIFY
-const port = 5000;
+const port = 5005;
 app.listen(port, () => console.log('Server is listening on port', port));

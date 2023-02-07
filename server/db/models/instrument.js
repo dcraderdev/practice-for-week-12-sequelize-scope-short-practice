@@ -18,9 +18,32 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     type: DataTypes.STRING,
     storeId: DataTypes.INTEGER
-  }, {
+  },
+{
     sequelize,
     modelName: 'Instrument',
+
+     defaultScope:{
+     attributes:{
+      exclude: [`createdAt`, `updatedAt`]
+      }
+    },
+    scopes:{
+      hasType(type) {
+        return {
+          where:{
+            type
+          }  
+        }   
+      }
+    }
+      // isKeyboard:{
+      //   where:{
+      //     type: 'keyboard'
+      //   }  
+      // }
+  
   });
   return Instrument;
 };
+
